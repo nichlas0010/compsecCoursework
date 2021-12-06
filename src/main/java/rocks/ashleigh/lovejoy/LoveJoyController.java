@@ -31,12 +31,14 @@ public class LoveJoyController {
     @RequestMapping(value = "/registeruser", method = RequestMethod.POST)
     public String registerUser(@ModelAttribute RegistrationForm form, Model model) {
         if (form.computeValidity()) {
-            return "emailConfirmation";
+            // TODO: Actually register the user
+            return "emailconfirmation";
         }
 
         form.setPassword("");
         form.setPasswordConfirmation("");
         model.addAttribute("user", form);
+        model.addAttribute("errors", form.getErrors());
         return "registration";
     }
 

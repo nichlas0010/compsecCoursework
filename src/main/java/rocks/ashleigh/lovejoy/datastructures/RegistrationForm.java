@@ -31,10 +31,16 @@ public class RegistrationForm {
         if (!EmailValidator.getInstance().isValid(emailAddress)) {
             errors.add("Email address is invalid!");
         }
+        // TODO: Check email isn't already used
 
+        if (password != passwordConfirmation) {
+            errors.add("Passwords do not match!");
+        }
+        // TODO: Check if passwords conform to policy
 
+        // TODO: Username policy
 
-        // TODO: Confirm that user input is valid
+        // TODO: Phone number policy
 
 
         valid = errors.size() == 0;
