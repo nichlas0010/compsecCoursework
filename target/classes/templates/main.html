@@ -9,12 +9,11 @@
     <div style="margin:auto;width:50%;">Main page</div>
     <ul style="margin:auto;width:50%;">
         <li><a href="/register">Registration</a></li>
-        <li><a href="/login">Login</a></li>
-        <li><a href="/logout">Log out</a></li>
-        <li><a href="/passwordrecovery">Password Recovery</a></li>
-        <li><a href="/requestevaluation">Request Evaluation</a></li>
-        <!-- To be made invisible if not admin -->
-        <li><a href="/evaluationrequests">Evaluation Requests</a></li>
+        <li th:unless="${login}"><a href="/login">Login</a></li>
+        <li th:unless="${login}"><a href="/passwordrecovery">Password Recovery</a></li>
+        <li th:if="${login}"><a href="/logout">Log out</a></li>
+        <li th:if="${login}"><a href="/requestevaluation">Request Evaluation</a></li>
+        <li th:if="${admin}"><a href="/evaluationrequests">Evaluation Requests</a></li>
     </ul>
 </head>
 <body>

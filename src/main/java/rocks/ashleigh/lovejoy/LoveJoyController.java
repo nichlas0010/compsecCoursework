@@ -4,13 +4,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
+import rocks.ashleigh.lovejoy.datastructures.LoginForm;
 import rocks.ashleigh.lovejoy.datastructures.RegistrationForm;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoveJoyController {
 
+    // DONE
     @GetMapping("/")
-    public String mainPage() {
+    public String mainPage(Model model, HttpSession session) {
+        model.addAttribute("login", session.getAttribute("login"));
+        model.addAttribute("admin", session.getAttribute("admin"));
         return "main";
     }
 
@@ -20,14 +25,12 @@ public class LoveJoyController {
     }
 
     /** -- REGISTRATION -- **/
-    // TODO
     @GetMapping("/register")
     public String registrationPage(Model model) {
         model.addAttribute("user", new RegistrationForm());
         return "registration";
     }
 
-    // TODO
     @RequestMapping(value = "/registeruser", method = RequestMethod.POST)
     public String registerUser(@ModelAttribute RegistrationForm form, Model model) {
         if (form.computeValidity()) {
@@ -43,15 +46,36 @@ public class LoveJoyController {
     }
 
 
-    // TODO
+    /** -- LOGIN -- **/
     @GetMapping("/login")
-    public String loginPage() {
+    public String loginPage(Model model, HttpSession session) {
+        if (session.getAttribute("login") != null) {
+            return "redirect:/";
+        }
+        model.addAttribute("user", new LoginForm());
         return "login";
     }
 
-    // TODO
+    @RequestMapping(value = "/loginuser", method = RequestMethod.POST)
+    public String loginUser(@ModelAttribute LoginForm form, Model model, HttpSession session) {
+        if (form.computeValidity()) {
+            session.setAttribute("login", true);
+            if (form.isAdmin()) {
+                session.setAttribute("admin", true);
+            }
+            return "redirect:/";
+        }
+
+        form.setPassword("");
+        model.addAttribute("user", form);
+        model.addAttribute("error", "Incorrect username or password!");
+        return "login";
+    }
+
     @GetMapping("/logout")
-    public RedirectView logoutPage() {
+    public RedirectView logoutPage(HttpSession session) {
+        session.removeAttribute("login");
+        session.removeAttribute("admin");
         return new RedirectView("/");
     }
 
@@ -63,13 +87,19 @@ public class LoveJoyController {
 
     // TODO
     @GetMapping("/requestevaluation")
-    public String requestPage() {
+    public String requestPage(HttpSession session) {
+        if (session.getAttribute("login") == null) {
+            return "redirect:/";
+        }
         return "request";
     }
 
     // TODO
     @GetMapping("/evaluationrequests")
-    public String evaluationPage() {
+    public String evaluationPage(HttpSession session) {
+        if (session.getAttribute("login") == null || session.getAttribute("admin") == null) {
+            return "redirect:/";
+        }
         return "evaluation";
     }
 
