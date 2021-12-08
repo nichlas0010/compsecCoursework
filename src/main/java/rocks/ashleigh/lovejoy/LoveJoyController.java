@@ -87,7 +87,7 @@ public class LoveJoyController {
                 String content = "Please click <a href='lovejoy.ashleigh.rocks/confirmemail?username=" +
                         userEntity.getName() +  "&token=" + userEntity.getToken();
                 MimeBodyPart mimeBodyPart = new MimeBodyPart();
-                mimeBodyPart.setContent(mimeBodyPart, "text/html; charset=utf-8");
+                mimeBodyPart.setContent(content, "text/html; charset=utf-8");
 
                 Multipart multipart = new MimeMultipart();
                 multipart.addBodyPart(mimeBodyPart);
