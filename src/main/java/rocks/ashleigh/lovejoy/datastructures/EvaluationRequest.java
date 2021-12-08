@@ -11,7 +11,7 @@ public class EvaluationRequest {
 
     private String comments;
     private String contactType;
-    private File image;
+    private MultipartFile image;
 
     private ArrayList<String> errors = new ArrayList<>();
 
