@@ -85,7 +85,7 @@ public class LoveJoyController {
                 message.setRecipient(Message.RecipientType.TO, new InternetAddress(userEntity.getEmailAddress()));
                 message.setSubject("Email Confirmation.");
                 String content = "Please click <a href='lovejoy.ashleigh.rocks/confirmemail?username=" +
-                        userEntity.getName() +  "&token=" + userEntity.getToken();
+                        userEntity.getName() +  "&token=" + userEntity.getToken() + ">HERE</a> to confirm your email!";
                 MimeBodyPart mimeBodyPart = new MimeBodyPart();
                 mimeBodyPart.setContent(content, "text/html; charset=utf-8");
 
