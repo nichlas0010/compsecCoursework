@@ -4,12 +4,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
+import rocks.ashleigh.lovejoy.datastructures.EvaluationRequest;
 import rocks.ashleigh.lovejoy.datastructures.LoginForm;
 import rocks.ashleigh.lovejoy.datastructures.RegistrationForm;
+import rocks.ashleigh.lovejoy.jpa.EvaluationEntity;
+import rocks.ashleigh.lovejoy.jpa.EvaluationRepository;
+import rocks.ashleigh.lovejoy.jpa.UserEntity;
+import rocks.ashleigh.lovejoy.jpa.UserRepository;
+
 import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoveJoyController {
+    private UserRepository userRepo;
+    private EvaluationRepository evalRepo;
+
+    public LoveJoyController(UserRepository userRepo, EvaluationRepository evalRepo) {
+        this.userRepo = userRepo;
+        this.evalRepo = evalRepo;
+    }
 
     // DONE
     @GetMapping("/")
@@ -33,8 +46,10 @@ public class LoveJoyController {
 
     @RequestMapping(value = "/registeruser", method = RequestMethod.POST)
     public String registerUser(@ModelAttribute RegistrationForm form, Model model) {
-        if (form.computeValidity()) {
-            // TODO: Actually register the user
+        if (form.computeValidity(userRepo)) {
+
+            UserEntity userEntity = new UserEntity(form);
+            userRepo.save(userEntity);
             return "emailconfirmation";
         }
 
@@ -59,7 +74,7 @@ public class LoveJoyController {
     @RequestMapping(value = "/loginuser", method = RequestMethod.POST)
     public String loginUser(@ModelAttribute LoginForm form, Model model, HttpSession session) {
         if (form.computeValidity()) {
-            session.setAttribute("login", true);
+            session.setAttribute("login", form.getUsername());
             if (form.isAdmin()) {
                 session.setAttribute("admin", true);
             }
@@ -87,10 +102,24 @@ public class LoveJoyController {
 
     // TODO
     @GetMapping("/requestevaluation")
-    public String requestPage(HttpSession session) {
+    public String requestPage(Model model, HttpSession session) {
         if (session.getAttribute("login") == null) {
             return "redirect:/";
         }
+        return "request";
+    }
+
+    @RequestMapping(value = "/submitrequest", method = RequestMethod.POST)
+    public String submitRequest(@ModelAttribute EvaluationRequest request, HttpSession session, Model model) {
+        if (session.getAttribute("login") == null) {
+            return "redirect:/";
+        }
+
+        if (request.computeValidity()) {
+            EvaluationEntity entity = new EvaluationEntity((String) session.getAttribute("login"), request);
+            evalRepo.save(entity);
+        }
+        // TODO: what if invalid
         return "request";
     }
 
@@ -101,13 +130,6 @@ public class LoveJoyController {
             return "redirect:/";
         }
         return "evaluation";
-    }
-
-    // TODO: Get rid of
-    @GetMapping("/hello")
-    public String helloWorld(@RequestParam(name="name", defaultValue = "World", required = false) String name, Model model) {
-        model.addAttribute("name", name);
-        return "hello";
     }
 
 }
