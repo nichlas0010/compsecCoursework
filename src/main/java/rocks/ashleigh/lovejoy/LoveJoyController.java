@@ -14,6 +14,7 @@ import rocks.ashleigh.lovejoy.jpa.UserEntity;
 import rocks.ashleigh.lovejoy.jpa.UserRepository;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 
 @Controller
 public class LoveJoyController {
@@ -112,11 +113,13 @@ public class LoveJoyController {
     }
 
     @RequestMapping(value = "/submitrequest", method = RequestMethod.POST)
-    public String submitRequest(@ModelAttribute EvaluationRequest request, HttpSession session, Model model) {
+    public String submitRequest(@RequestParam("image") File file, @ModelAttribute EvaluationRequest request, HttpSession session, Model model) {
         if (session.getAttribute("login") == null) {
             return "redirect:/";
         }
 
+        System.out.println(file);
+        System.out.println(file.exists());
         System.out.println(request.getImage());
         if (request.computeValidity()) {
             EvaluationEntity entity = new EvaluationEntity((String) session.getAttribute("login"), request);
