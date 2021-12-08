@@ -3,6 +3,7 @@ package rocks.ashleigh.lovejoy;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 import rocks.ashleigh.lovejoy.datastructures.EvaluationRequest;
 import rocks.ashleigh.lovejoy.datastructures.LoginForm;
@@ -111,11 +112,11 @@ public class LoveJoyController {
     }
 
     @RequestMapping(value = "/submitrequest", method = RequestMethod.POST)
-    public String submitRequest(@ModelAttribute EvaluationRequest request, HttpSession session, Model model) {
+    public String submitRequest(@RequestParam("file") MultipartFile file, @ModelAttribute EvaluationRequest request, HttpSession session, Model model) {
         if (session.getAttribute("login") == null) {
             return "redirect:/";
         }
-
+        request.setImage(file);
         if (request.computeValidity()) {
             EvaluationEntity entity = new EvaluationEntity((String) session.getAttribute("login"), request);
             evalRepo.save(entity);
