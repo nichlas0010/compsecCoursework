@@ -10,7 +10,7 @@ public class EvaluationRequest {
 
     private String comments;
     private String contactType;
-    private MultipartFile image;
+    private String image;
 
     private ArrayList<String> errors = new ArrayList<>();
 

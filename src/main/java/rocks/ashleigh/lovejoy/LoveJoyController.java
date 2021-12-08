@@ -112,11 +112,11 @@ public class LoveJoyController {
     }
 
     @RequestMapping(value = "/submitrequest", method = RequestMethod.POST)
-    public String submitRequest(@RequestParam("file") MultipartFile file, @ModelAttribute EvaluationRequest request, HttpSession session, Model model) {
+    public String submitRequest(@ModelAttribute EvaluationRequest request, HttpSession session, Model model) {
         if (session.getAttribute("login") == null) {
             return "redirect:/";
         }
-        request.setImage(file);
+
         if (request.computeValidity()) {
             EvaluationEntity entity = new EvaluationEntity((String) session.getAttribute("login"), request);
             evalRepo.save(entity);
