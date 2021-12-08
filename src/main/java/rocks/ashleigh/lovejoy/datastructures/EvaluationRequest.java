@@ -25,6 +25,10 @@ public class EvaluationRequest {
             errors.add("Please select a contact method!");
         }
 
+        if (!image.isEmpty() && image.getSize() >= 11000000) {
+            errors.add("Image is too big! Please upload an image that is less than 10MB");
+        }
+
         return errors.size() == 0;
     }
 }
