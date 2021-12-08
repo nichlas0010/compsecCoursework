@@ -26,7 +26,6 @@ public class UserEntity {
 
         try {
             password = new String(Base64.encodeBase64(MessageDigest.getInstance("SHA-256").digest((password + token).getBytes())));
-            System.out.println(password);
         } catch (Exception e) {
             // This will always work, SHA-256 is going nowhere. But just in case, I'll print the error.
             e.printStackTrace();
@@ -35,7 +34,10 @@ public class UserEntity {
 
     public boolean comparePassword(String pass) {
         try {
-            return new String(Base64.encodeBase64(MessageDigest.getInstance("SHA-256").digest((pass + token).getBytes()))).equals(password);
+            pass = new String(Base64.encodeBase64(MessageDigest.getInstance("SHA-256").digest((pass + token).getBytes())));
+            System.out.println(pass);
+            System.out.println(password);
+            return password.equals(pass);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

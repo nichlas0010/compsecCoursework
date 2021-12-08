@@ -44,7 +44,7 @@ public class RegistrationForm {
             errors.add("Passwords do not match!");
         }
 
-        if (name != name.replaceAll("[^a-zA-Z0-9]", "")) {
+        if (!name.equals(name.replaceAll("[^a-zA-Z0-9]", ""))) {
             errors.add("Username contains non-alphanumeric characters! Please only use a-Z and 0-9!");
         }
 
