@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.File;
+import java.nio.file.Files;
 
 @Entity
 public class EvaluationEntity {
@@ -16,13 +17,9 @@ public class EvaluationEntity {
         this.name = name;
         comments = request.getComments();
         contactType = request.getContactType();
-        image = new File(request.getImage().getPath());
-        System.out.println("paths");
-        System.out.println(request.getImage().getPath());
-        System.out.println(request.getImage().getAbsolutePath());
         try {
-            System.out.println(request.getImage().getCanonicalPath());
-        } catch (Exception e) {}
+            image = Files.readAllBytes(request.getImage().toPath());
+        } catch (Exception e) {System.out.println("shit's fucked");}
 
     }
 
@@ -32,5 +29,5 @@ public class EvaluationEntity {
     private String name;
     private String comments;
     private String contactType;
-    private File image;
+    private byte[] image;
 }
