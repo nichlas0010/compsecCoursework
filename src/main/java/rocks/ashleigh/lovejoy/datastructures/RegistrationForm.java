@@ -40,7 +40,7 @@ public class RegistrationForm {
             errors.add("Email address is already in use!");
         }
 
-        if (password != passwordConfirmation) {
+        if (!password.equals(passwordConfirmation)) {
             errors.add("Passwords do not match!");
         }
 
