@@ -19,7 +19,9 @@ public class EvaluationEntity {
         contactType = request.getContactType();
         try {
             image = Files.readAllBytes(request.getImage().toPath());
-        } catch (Exception e) {System.out.println("shit's fucked");}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
