@@ -18,7 +18,7 @@ public class EvaluationEntity {
         comments = request.getComments();
         contactType = request.getContactType();
         try {
-            image = Files.readAllBytes(request.getImage().toPath());
+            image = request.getImage().getBytes();
         } catch (Exception e) {
             e.printStackTrace();
         }
