@@ -3,6 +3,8 @@ package rocks.ashleigh.lovejoy.datastructures;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+
 @Data
 public class EvaluationRequest {
 
@@ -10,10 +12,18 @@ public class EvaluationRequest {
     private String contactType;
     private MultipartFile image;
 
+    private ArrayList<String> errors = new ArrayList<>();
+
     public boolean computeValidity() {
-        if (comments.length() != 0 && (contactType == "telephone" || contactType == "email")) {
-            return true;
+        errors.clear();
+
+        if (comments.length() == 0 ) {
+            errors.add("Please fill in the comments section!");
         }
-        return false;
+        if (contactType != "phone" && contactType != "email") {
+            errors.add("Please select a contact type!");
+        }
+
+        return errors.size() == 0;
     }
 }

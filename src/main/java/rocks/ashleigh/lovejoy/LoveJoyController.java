@@ -106,6 +106,7 @@ public class LoveJoyController {
         if (session.getAttribute("login") == null) {
             return "redirect:/";
         }
+        model.addAttribute("request", new EvaluationRequest());
         return "request";
     }
 
@@ -118,8 +119,10 @@ public class LoveJoyController {
         if (request.computeValidity()) {
             EvaluationEntity entity = new EvaluationEntity((String) session.getAttribute("login"), request);
             evalRepo.save(entity);
+            return "requested";
         }
-        // TODO: what if invalid
+        model.addAttribute("request", request);
+        model.addAttribute("errors", request.getErrors());
         return "request";
     }
 

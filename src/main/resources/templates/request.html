@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <div style="margin:auto;width:50%;">Request Evaluation -- Click <a href="/">here</a> to return to the main page!</div>
+    <form style="margin:auto;width:50%;" action="#" th:action="@{/submitrequest}" th:object="${request}" method="post">
+        <table border="1">
+            <tr>
+                <td><label>Comments</label></td>
+                <td><input type="text" th:field="*{comments}" /></td>
+            </tr>
+            <tr>
+                <td><label>Preferred Contact Method</label></td>
+                <td>
+                    <input id = "phone" type="radio" th:field="*{contactType}" />
+                    <input id = "email" type="radio" th:field="*{contactType}" />
+                    <label for = "phone">Telephone</label>
+                    <label for = "email">Email</label>
+                </td>
+            </tr>
+
+            <tr>
+                <td><label>Image</label></td>
+                <td><input type="file" accept=".png,.jpg,.JPEG,.img" th:field="image"/></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Submit" /></td>
+            </tr>
+        </table>
+    </form>
+
+    <div style="color:red;margin:auto;width:50%;" th:if="${errors != null}">
+        <tbody>
+        <tr th:each="error: ${errors}">
+            <br><td th:text="${error}"/>
+        </tr>
+        </tbody>
+    </div>
+</head>
+<body>
+
+</body>
+</html>
