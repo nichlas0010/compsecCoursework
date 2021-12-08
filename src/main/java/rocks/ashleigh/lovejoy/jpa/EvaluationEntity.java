@@ -15,13 +15,13 @@ public class EvaluationEntity {
         this.name = name;
         comments = request.getComments();
         contactType = request.getContactType();
-        if (request.getImage() != null) {
+        /*if (request.getImage() != null) {
             try {
                 image = request.getImage().getBytes();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        } */
 
     }
 
