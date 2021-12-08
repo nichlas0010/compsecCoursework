@@ -20,8 +20,8 @@ public class EvaluationRequest {
         if (comments.length() == 0 ) {
             errors.add("Please fill in the comments section!");
         }
-        if (contactType != "phone" && contactType != "email") {
-            errors.add("Please select a contact type instead of !" + contactType);
+        if (!contactType.equals("phone") && !contactType.equals("email")) {
+            errors.add("Please select a contact type instead of !");
         }
 
         return errors.size() == 0;
