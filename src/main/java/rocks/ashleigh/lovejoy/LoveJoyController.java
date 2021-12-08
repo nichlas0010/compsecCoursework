@@ -1,5 +1,6 @@
 package rocks.ashleigh.lovejoy;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,19 +14,42 @@ import rocks.ashleigh.lovejoy.jpa.EvaluationRepository;
 import rocks.ashleigh.lovejoy.jpa.UserEntity;
 import rocks.ashleigh.lovejoy.jpa.UserRepository;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.util.Properties;
 import java.util.Random;
 
 @Controller
 public class LoveJoyController {
     private UserRepository userRepo;
     private EvaluationRepository evalRepo;
+    private Properties prop = new Properties();
     private Random random = new Random();
+    private Session session;
+    private String emailUser;
 
-    public LoveJoyController(UserRepository userRepo, EvaluationRepository evalRepo) {
+    public LoveJoyController(UserRepository userRepo, EvaluationRepository evalRepo, @Value("${EMAIL_USERNAME}") String emailUser, @Value("${EMAIL_PASSWORD}") String emailPass) {
         this.userRepo = userRepo;
         this.evalRepo = evalRepo;
+
+        prop.put("mail.smtp.auth", true);
+        prop.put("mail.smtp.starttls.enable", "true");
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "465");
+        prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        this.emailUser = emailUser;
+
+        session = Session.getInstance(prop, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(emailUser, emailPass);
+            }
+        });
     }
 
     // DONE
@@ -54,6 +78,28 @@ public class LoveJoyController {
 
             UserEntity userEntity = new UserEntity(form, String.valueOf(random.nextInt(12412953)));
             userRepo.save(userEntity);
+
+            Message message = new MimeMessage(session);
+            try {
+                message.setFrom(new InternetAddress(emailUser));
+                message.setRecipient(Message.RecipientType.TO, new InternetAddress(userEntity.getEmailAddress()));
+                message.setSubject("Email Confirmation.");
+                String content = "Please click <a href='lovejoy.ashleigh.rocks/confirmemail?username=" +
+                        userEntity.getName() +  "&token=" + userEntity.getToken();
+                MimeBodyPart mimeBodyPart = new MimeBodyPart();
+                mimeBodyPart.setContent(mimeBodyPart, "text/html; charset=utf-8");
+
+                Multipart multipart = new MimeMultipart();
+                multipart.addBodyPart(mimeBodyPart);
+
+                message.setContent(multipart);
+                Transport.send(message);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "redirect:/";
+            }
+
             return "emailconfirmation";
         }
 
