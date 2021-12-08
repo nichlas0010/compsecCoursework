@@ -27,6 +27,7 @@ public class EvaluationEntity {
 
     @Id
     @GeneratedValue
+    private int id;
     private String name;
     private String comments;
     private String contactType;

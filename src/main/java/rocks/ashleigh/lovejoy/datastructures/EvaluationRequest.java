@@ -20,7 +20,7 @@ public class EvaluationRequest {
         if (comments.length() == 0 ) {
             errors.add("Please fill in the comments section!");
         }
-        if (!contactType.equals("phone") && !contactType.equals("email")) {
+        if (contactType == null || (!contactType.equals("phone") && !contactType.equals("email"))) {
             errors.add("Please select a contact type instead of !");
         }
 
