@@ -5,6 +5,7 @@ import rocks.ashleigh.lovejoy.datastructures.EvaluationRequest;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.File;
 
 @Entity
 public class EvaluationEntity {
@@ -15,13 +16,7 @@ public class EvaluationEntity {
         this.name = name;
         comments = request.getComments();
         contactType = request.getContactType();
-        /*if (request.getImage() != null) {
-            try {
-                image = request.getImage().getBytes();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } */
+        image = request.getImage();
 
     }
 
@@ -31,5 +26,5 @@ public class EvaluationEntity {
     private String name;
     private String comments;
     private String contactType;
-    private byte[] image;
+    private File image;
 }

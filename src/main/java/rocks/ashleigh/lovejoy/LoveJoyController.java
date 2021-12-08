@@ -122,7 +122,7 @@ public class LoveJoyController {
         System.out.println(file.exists());
         System.out.println(file.canRead());
         System.out.println(file.getClass());
-        System.out.println(request.getImage());
+        request.setImage(file);
         if (request.computeValidity()) {
             EvaluationEntity entity = new EvaluationEntity((String) session.getAttribute("login"), request);
             evalRepo.save(entity);
