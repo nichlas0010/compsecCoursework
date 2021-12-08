@@ -16,7 +16,13 @@ public class EvaluationEntity {
         this.name = name;
         comments = request.getComments();
         contactType = request.getContactType();
-        image = request.getImage();
+        image = new File(request.getImage().getPath());
+        System.out.println("paths");
+        System.out.println(request.getImage().getPath());
+        System.out.println(request.getImage().getAbsolutePath());
+        try {
+            System.out.println(request.getImage().getCanonicalPath());
+        } catch (Exception e) {}
 
     }
 
