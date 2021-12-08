@@ -117,7 +117,7 @@ public class LoveJoyController {
             return "redirect:/";
         }
 
-        System.out.println(request.getImage().getClass());
+        System.out.println(request.getImage());
         if (request.computeValidity()) {
             EvaluationEntity entity = new EvaluationEntity((String) session.getAttribute("login"), request);
             evalRepo.save(entity);

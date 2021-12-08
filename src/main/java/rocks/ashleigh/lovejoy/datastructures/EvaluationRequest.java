@@ -21,7 +21,7 @@ public class EvaluationRequest {
             errors.add("Please fill in the comments section!");
         }
         if (contactType == null || (!contactType.equals("phone") && !contactType.equals("email"))) {
-            errors.add("Please select a contact type instead of !");
+            errors.add("Please select a contact method!");
         }
 
         return errors.size() == 0;
