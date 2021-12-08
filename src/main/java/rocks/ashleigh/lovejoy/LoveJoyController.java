@@ -15,11 +15,13 @@ import rocks.ashleigh.lovejoy.jpa.UserRepository;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.util.Random;
 
 @Controller
 public class LoveJoyController {
     private UserRepository userRepo;
     private EvaluationRepository evalRepo;
+    private Random random = new Random();
 
     public LoveJoyController(UserRepository userRepo, EvaluationRepository evalRepo) {
         this.userRepo = userRepo;
@@ -50,7 +52,7 @@ public class LoveJoyController {
     public String registerUser(@ModelAttribute RegistrationForm form, Model model) {
         if (form.computeValidity(userRepo)) {
 
-            UserEntity userEntity = new UserEntity(form);
+            UserEntity userEntity = new UserEntity(form, String.valueOf(random.nextInt(12412953)));
             userRepo.save(userEntity);
             return "emailconfirmation";
         }
@@ -60,6 +62,23 @@ public class LoveJoyController {
         model.addAttribute("user", form);
         model.addAttribute("errors", form.getErrors());
         return "registration";
+    }
+
+    @GetMapping("/confirmemail")
+    public String confirmEmail(@RequestParam("username") String name, @RequestParam("token") String token) {
+        UserEntity user = userRepo.findById(name).get();
+        if (user.equals(null)) {
+            return "redirect:/";
+        }
+
+        if (user.getToken().equals(token)) {
+            user.setEmailConfirmed(true);
+            userRepo.save(user);
+            return "successemail";
+        }
+        return "failemail";
+
+
     }
 
 
@@ -75,9 +94,10 @@ public class LoveJoyController {
 
     @RequestMapping(value = "/loginuser", method = RequestMethod.POST)
     public String loginUser(@ModelAttribute LoginForm form, Model model, HttpSession session) {
-        if (form.computeValidity()) {
+        UserEntity userEntity = userRepo.findById(form.getUsername()).get();
+        if (userEntity != null && userEntity.comparePassword(form.getPassword())) {
             session.setAttribute("login", form.getUsername());
-            if (form.isAdmin()) {
+            if (userEntity.isAdmin()) {
                 session.setAttribute("admin", true);
             }
             return "redirect:/";
