@@ -24,9 +24,7 @@ public class EvaluationEntity {
             } else {
                 hasImage = true;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
 
     }
 

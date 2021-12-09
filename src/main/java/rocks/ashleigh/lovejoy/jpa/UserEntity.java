@@ -36,9 +36,7 @@ public class UserEntity {
         try {
             pass = new String(Base64.encodeBase64(MessageDigest.getInstance("SHA-256").digest((pass + token).getBytes())));
             return password.equals(pass);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
         return false;
     }
 
