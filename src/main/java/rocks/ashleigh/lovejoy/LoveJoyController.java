@@ -90,8 +90,8 @@ public class LoveJoyController {
                 helper.setTo(userEntity.getEmailAddress());
                 helper.setSubject("Email confirmation");
                 helper.setText(
-                        "Dear "+userEntity.getName()+",please click <a href='lovejoy.ashleigh.rocks/confirmemail?username=" +
-                        userEntity.getName() +  "&token=" + userEntity.getToken() + "'>HERE</a> to confirm your email!",
+                        "Dear "+userEntity.getName()+",please click <a href='lovejoy.ashleigh.rocks/confirmemail?email=" +
+                        userEntity.getEmailAddress() +  "&token=" + userEntity.getToken() + "'>HERE</a> to confirm your email!",
                         true);
 
                 mailSender.send(mimeMessage);
@@ -110,9 +110,9 @@ public class LoveJoyController {
     }
 
     @GetMapping("/confirmemail")
-    public String confirmEmail(@RequestParam("username") String name, @RequestParam("token") String token) {
-        UserEntity user = userRepo.findById(name).get();
-        if (user.equals(null)) {
+    public String confirmEmail(@RequestParam("address") String name, @RequestParam("token") String token) {
+        UserEntity user = userRepo.findByEmailAddress(name);
+        if (user == null) {
             return "redirect:/";
         }
 
