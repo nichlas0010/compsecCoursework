@@ -267,7 +267,7 @@ public class LoveJoyController {
         return "redirect:/";
     }
 
-    @PostMapping("/resetPass")
+    @PostMapping("/resetpass")
     public String resetPassword(@ModelAttribute ResetRequest reset, Model model) {
         if(reset.computeValidity()) {
             UserEntity userEntity = userRepo.findByEmailAddress(reset.getAddress());
