@@ -220,6 +220,8 @@ public class LoveJoyController {
 
     @PostMapping("/secanswer")
     public String securityAnswer(@ModelAttribute("address") String address, @ModelAttribute("secAnswer") String answer, Model model) {
+        System.out.println("Address: "+address);
+        System.out.println("answer: "+answer);
         UserEntity userEntity = userRepo.findByEmailAddress(address);
         if (userEntity != null) {
             System.out.println(answer);
