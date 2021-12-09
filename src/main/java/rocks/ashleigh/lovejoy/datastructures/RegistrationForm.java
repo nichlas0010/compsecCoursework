@@ -39,6 +39,9 @@ public class RegistrationForm {
         if (userRepo.findByEmailAddress(emailAddress) != null) {
             errors.add("Email address is already in use!");
         }
+        if (userRepo.findById(name).get() != null) {
+            errors.add("Username is already in use!");
+        }
 
         if (!password.equals(passwordConfirmation)) {
             errors.add("Passwords do not match!");
