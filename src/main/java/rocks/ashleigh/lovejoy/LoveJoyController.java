@@ -92,7 +92,7 @@ public class LoveJoyController {
                 helper.setSubject("Email confirmation");
                 helper.setText(
                         "Please click <a href='lovejoy.ashleigh.rocks/confirmemail?username=" +
-                        userEntity.getName() +  "&token=" + userEntity.getToken() + ">HERE</a> to confirm your email!",
+                        userEntity.getName() +  "&token=" + userEntity.getToken() + "'>HERE</a> to confirm your email!",
                         true);
 
                 mailSender.send(mimeMessage);
