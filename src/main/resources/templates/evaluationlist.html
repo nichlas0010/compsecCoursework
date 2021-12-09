@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <title>Evaluation requests</title>
     <div style="margin:auto;width:50%;">Evaluation Requests -- Click <a href="/">here</a> to return to the main page!</div>
-    <tr style="margin:auto;width:50%;" th:each="instance : ${requests}">
-        <table border="1">
+    <tr th:each="instance : ${requests}">
+        <table style="margin:auto;width:50%;" border="1">
             <tr>
                 <td><label>Comments</label></td>
                 <td th:text="${instance.key.comments}"/>
@@ -16,7 +16,7 @@
             </tr>
             <tr th:if="${instance.key.image != null}">
                 <td><label>Image</label></td>
-                <img th:src="@{/imgs/${instance.key.id}}"/>
+                <img th:src="@{/imgs/'${instance.key.id}'}"/>
             </tr>
             <tr>
                 <td><label>Name</label></td>
@@ -28,9 +28,10 @@
             </tr>
             <tr>
                 <td><label>Email Address</label></td>
-                <td th:text="${instance.value.emailAddress}";
+                <td th:text="${instance.value.emailAddress}"/>
             </tr>
         </table>
+        <br>
 
     </tr>
 </head>
