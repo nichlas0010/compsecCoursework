@@ -260,7 +260,7 @@ public class LoveJoyController {
             if(userEntity.isResetting() && userEntity.getToken().equals(token)) {
                 ResetRequest reset = new ResetRequest();
                 reset.setAddress(address);
-                model.addAttribute("request", reset);
+                model.addAttribute("reset", reset);
                 return "resetpass";
             }
         }
