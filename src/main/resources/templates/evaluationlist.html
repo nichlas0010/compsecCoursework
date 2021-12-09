@@ -14,6 +14,7 @@
                 <td><label>Contact Type</label></td>
                 <td th:text="${instance.key.contactType}"/>
             </tr>
+            <img th:src="${'/imgs/'+instance.key.id}"/>
             <tr>
                 <td><label>Name</label></td>
                 <td th:text="${instance.value.name}"/>
@@ -27,8 +28,6 @@
                 <td th:text="${instance.value.emailAddress}"/>
             </tr>
         </table>
-        <img style="margin:auto;width:50%;" th:src="${'/imgs/'+instance.key.id}"/>
-        <div th:text="${instance.key.image}"/>
         <br>
 
     </tr>
