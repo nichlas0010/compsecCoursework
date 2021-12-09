@@ -24,6 +24,7 @@ import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import java.io.File;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Random;
 
@@ -88,7 +89,7 @@ public class LoveJoyController {
             try {
                 MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
                 helper.setTo(userEntity.getEmailAddress());
-                helper.setSubject("I achieved the Email with Java 7 and Spring");
+                helper.setSubject("Email confirmation");
                 helper.setText(
                         "Please click <a href='lovejoy.ashleigh.rocks/confirmemail?username=" +
                         userEntity.getName() +  "&token=" + userEntity.getToken() + ">HERE</a> to confirm your email!",
@@ -139,15 +140,17 @@ public class LoveJoyController {
 
     @RequestMapping(value = "/loginuser", method = RequestMethod.POST)
     public String loginUser(@ModelAttribute LoginForm form, Model model, HttpSession session) {
-        UserEntity userEntity = userRepo.findById(form.getUsername()).get();
-        if (userEntity != null && userEntity.comparePassword(form.getPassword())) {
-            session.setAttribute("login", form.getUsername());
-            if (userEntity.isAdmin()) {
-                session.setAttribute("admin", true);
+        Optional<UserEntity> option = userRepo.findById(form.getUsername());
+        if (option.isPresent()) {
+            UserEntity userEntity = option.get();
+            if (userEntity.comparePassword(form.getPassword())) {
+                session.setAttribute("login", form.getUsername());
+                if (userEntity.isAdmin()) {
+                    session.setAttribute("admin", true);
+                }
+                return "redirect:/";
             }
-            return "redirect:/";
         }
-
         form.setPassword("");
         model.addAttribute("user", form);
         model.addAttribute("error", "Incorrect username or password!");
