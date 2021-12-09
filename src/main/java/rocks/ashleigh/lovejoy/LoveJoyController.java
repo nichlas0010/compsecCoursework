@@ -206,7 +206,11 @@ public class LoveJoyController {
 
     @RequestMapping(value = "/imgs/{img_id}")
     public ResponseEntity<byte[]> getImage(@PathVariable("img_id") String s) {
-        EvaluationEntity e = evalRepo.findById(Integer.valueOf(s)).get();
+        Optional<EvaluationEntity> opt = evalRepo.findById(Integer.valueOf(s));
+        if (!opt.isPresent()) {
+            return new ResponseEntity<>(new HttpHeaders(), HttpStatus.BAD_REQUEST);
+        }
+        EvaluationEntity e = opt.get();
         return new ResponseEntity<>(e.getImage(), new HttpHeaders(), HttpStatus.OK);
     }
 
