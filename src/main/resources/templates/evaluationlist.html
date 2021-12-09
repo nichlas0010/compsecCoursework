@@ -8,7 +8,27 @@
         <table border="1">
             <tr>
                 <td><label>Comments</label></td>
-                <td th:text="${instance.key.comments}"></td>
+                <td th:text="${instance.key.comments}"/>
+            </tr>
+            <tr>
+                <td><label>Contact Type</label></td>
+                <td th:text="${instance.key.contactType}"/>
+            </tr>
+            <tr th:if="${instance.key.image != null}">
+                <td><label>Image</label></td>
+                <img th:src="@{/imgs/${instance.key.id}}"/>
+            </tr>
+            <tr>
+                <td><label>Name</label></td>
+                <td th:text="${instance.value.name}"/>
+            </tr>
+            <tr>
+                <td><label>Phone Number</label></td>
+                <td th:text="${instance.value.phoneNumber}"/>
+            </tr>
+            <tr>
+                <td><label>Email Address</label></td>
+                <td th:text="${instance.value.emailAddress}";
             </tr>
         </table>
 

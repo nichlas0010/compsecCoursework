@@ -1,6 +1,10 @@
 package rocks.ashleigh.lovejoy;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -198,6 +202,12 @@ public class LoveJoyController {
         }
         model.addAttribute("requests", map);
         return "evaluationlist";
+    }
+
+    @RequestMapping(value = "/imgs/{img_id}")
+    public ResponseEntity<byte[]> getImage(@PathVariable("img_id") int img_id) {
+        EvaluationEntity e = evalRepo.findById(img_id).get();
+        return new ResponseEntity<>(e.getImage(), new HttpHeaders(), HttpStatus.OK);
     }
 
 }
