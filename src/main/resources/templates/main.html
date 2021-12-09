@@ -9,7 +9,7 @@
     <div style="margin:auto;width:50%;">Main page</div>
     <ul style="margin:auto;width:50%;">
         <li th:if="${loggedin}"><a href="/requestevaluation">Request Evaluation</a></li>
-        <li th:if="${admin && loggedin}"><a href="/evaluationrequests">Evaluation Requests</a></li>
+        <li th:if="${admin} && ${loggedin}"><a href="/evaluationrequests">Evaluation Requests</a></li>
         <li th:if="${loggedin}"><a href="/logout">Log out</a></li>
         <li th:unless="${loggedin}"><a href="/register">Registration</a></li>
         <li th:unless="${loggedin}"><a href="/passwordrecovery">Password Recovery</a></li>
