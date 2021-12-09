@@ -170,7 +170,7 @@ public class LoveJoyController {
         }
         form.setPassword("");
         model.addAttribute("user", form);
-        return "loggedin";
+        return "login";
     }
 
     @GetMapping("/askforpin")
