@@ -131,7 +131,7 @@ public class LoveJoyController {
             return "redirect:/";
         }
         model.addAttribute("user", new LoginForm());
-        return "loggedin";
+        return "login";
     }
 
     @PostMapping("/loginuser")
