@@ -222,6 +222,7 @@ public class LoveJoyController {
     public String securityAnswer(@ModelAttribute("address") String address, @ModelAttribute("secAnswer") String answer, Model model) {
         UserEntity userEntity = userRepo.findByEmailAddress(address);
         if (userEntity != null) {
+            System.out.println(answer);
             if (userEntity.getSecAnswer().equals(answer)) {
                 userEntity.setResetting(true);
                 userRepo.save(userEntity);

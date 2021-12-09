@@ -8,11 +8,11 @@
         <table border="1">
             <tr>
                 <td><label>Email</label></td>
-                <td><input type="text" th:object="${address}" /></td>
+                <td th:text="${address}"/>
             </tr>
             <tr>
                 <td><label>Security Question</label></td>
-                <td th:text="${secQuestion}"></td>
+                <td th:text="${secQuestion}"/>
             </tr>
             <tr>
                 <td><label>Security Answer</label></td>
