@@ -28,7 +28,7 @@ public class UserEntity {
             password = new String(Base64.encodeBase64(MessageDigest.getInstance("SHA-256").digest((password + token).getBytes())));
         } catch (Exception e) {
             // This will always work, SHA-256 is going nowhere. But just in case, I'll print the error.
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
