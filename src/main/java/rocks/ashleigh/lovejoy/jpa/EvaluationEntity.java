@@ -19,6 +19,11 @@ public class EvaluationEntity {
         contactType = request.getContactType();
         try {
             image = request.getImage().getBytes();
+            if (image.length == 0) {
+                hasImage = false;
+            } else {
+                hasImage = true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,4 +37,5 @@ public class EvaluationEntity {
     private String comments;
     private String contactType;
     private byte[] image;
+    private boolean hasImage;
 }
