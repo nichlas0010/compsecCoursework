@@ -7,6 +7,7 @@ import rocks.ashleigh.lovejoy.datastructures.RegistrationForm;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 
 @Data
@@ -23,6 +24,9 @@ public class UserEntity {
         this.token = token;
         emailConfirmed = false;
         isAdmin = false;
+        secAnswer = form.getSecAnswer();
+        secQuestion = form.getSecQuestion();
+        isResetting = false;
 
         try {
             password = new String(Base64.encodeBase64(MessageDigest.getInstance("SHA-256").digest((password + token).getBytes())));
@@ -41,6 +45,14 @@ public class UserEntity {
         }
     }
 
+    public void newPassword(String pass) {
+        try {
+            this.password = new String(Base64.encodeBase64(MessageDigest.getInstance("SHA-256").digest((pass + token).getBytes())));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error updating password", e);
+        }
+    }
+
 
     private String name;
     @Id
@@ -51,4 +63,7 @@ public class UserEntity {
     private boolean emailConfirmed;
     private boolean isAdmin;
     private LocalDateTime lastLogin;
+    private String secQuestion;
+    private String secAnswer;
+    private boolean isResetting;
 }

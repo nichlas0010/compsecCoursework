@@ -14,6 +14,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import rocks.ashleigh.lovejoy.datastructures.EvaluationRequest;
 import rocks.ashleigh.lovejoy.datastructures.LoginForm;
 import rocks.ashleigh.lovejoy.datastructures.RegistrationForm;
+import rocks.ashleigh.lovejoy.datastructures.ResetRequest;
 import rocks.ashleigh.lovejoy.jpa.EvaluationEntity;
 import rocks.ashleigh.lovejoy.jpa.EvaluationRepository;
 import rocks.ashleigh.lovejoy.jpa.UserEntity;
@@ -185,6 +186,8 @@ public class LoveJoyController {
             session.setAttribute("loggedin", true);
             return "redirect:/";
         } else {
+            session.removeAttribute("login");
+            session.removeAttribute("admin");
             return "redirect:/login";
         }
     }
@@ -198,11 +201,84 @@ public class LoveJoyController {
 
     // TODO
     @GetMapping("/passwordrecovery")
-    public String recoveryPage() {
+    public String recoveryPage(Model model) {
+        model.addAttribute("address", "");
         return "recovery";
     }
 
-    // TODO
+    @PostMapping("/secquest")
+    public String securityQuestion(@ModelAttribute("address") String address, Model model) {
+        UserEntity userEntity = userRepo.findByEmailAddress(address);
+        if (userEntity != null) {
+            model.addAttribute("address", address);
+            model.addAttribute("secQuestion", userEntity.getSecQuestion());
+            model.addAttribute("secAnswer", "");
+            return "secquest";
+        }
+        return "redirect:/";
+    }
+
+    @PostMapping("/secanswer")
+    public String securityAnswer(@ModelAttribute("address") String address, @ModelAttribute("secAnswer") String answer, Model model) {
+        UserEntity userEntity = userRepo.findByEmailAddress(address);
+        if (userEntity != null) {
+            if (userEntity.getSecAnswer().equals(answer)) {
+                userEntity.setResetting(true);
+                userRepo.save(userEntity);
+                MimeMessage mimeMessage = mailSender.createMimeMessage();
+                try {
+                    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+                    helper.setTo(userEntity.getEmailAddress());
+                    helper.setSubject("Login Pin");
+                    helper.setText(
+                            "Dear "+userEntity.getName()+", please go <a href='https://lovejoy.ashleigh.rocks/resetpass?token=" +
+                                    userEntity.getToken() + "&address="+ userEntity.getEmailAddress()+"'>HERE</a> to reset your password!",
+                            true);
+
+                    mailSender.send(mimeMessage);
+                } catch (MessagingException e) {
+                    throw new RuntimeException("Error sending email containing password reset to user ", e);
+                }
+
+                return "emailconf";
+            }
+
+            model.addAttribute("address", address);
+            return "secquest";
+        }
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/resetpass")
+    public String resetPass(@RequestParam("token") String token, @RequestParam("address") String address, Model model) {
+        UserEntity userEntity = userRepo.findByEmailAddress(address);
+        if (userEntity != null) {
+            if(userEntity.isResetting() && userEntity.getToken().equals(token)) {
+                ResetRequest reset = new ResetRequest();
+                reset.setAddress(address);
+                model.addAttribute("request", reset);
+                return "resetpass";
+            }
+        }
+        return "redirect:/";
+    }
+
+    @PostMapping("/resetPass")
+    public String resetPassword(@ModelAttribute ResetRequest reset, Model model) {
+        if(reset.computeValidity()) {
+            UserEntity userEntity = userRepo.findByEmailAddress(reset.getAddress());
+            if (userEntity != null) {
+                userEntity.newPassword(reset.getPassword());
+                userEntity.setResetting(false);
+                userRepo.save(userEntity);
+                return "successpass";
+            }
+        }
+        model.addAttribute("errors", reset.getErrors());
+        return "resetpass";
+    }
+
     @GetMapping("/requestevaluation")
     public String requestPage(Model model, HttpSession session) {
         if (session.getAttribute("loggedin") == null) {

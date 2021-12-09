@@ -14,6 +14,8 @@ public class RegistrationForm {
     private String password;
     private String passwordConfirmation;
     private String phoneNumber;
+    private String secQuestion;
+    private String secAnswer;
 
     private boolean valid = false;
     private ArrayList<String> errors = new ArrayList<>();
@@ -56,6 +58,10 @@ public class RegistrationForm {
         // So I'll just accept any string as input.
         if (phoneNumber.length() == 0) {
             errors.add("Please enter a phone number!");
+        }
+
+        if (secAnswer.length() == 0 || secQuestion.length() == 0) {
+            errors.add("Please enter a security question and answer!");
         }
 
 

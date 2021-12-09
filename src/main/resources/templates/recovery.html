@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Password Reset</title>
+    <div style="margin:auto;width:50%;">Password reset -- Click <a href="/">here</a> to return to the main page!</div>
+    <form style="margin:auto;width:50%;" action="#" th:action="@{/secquest}" method="post">
+        <table border="1">
+            <tr>
+                <td><label>Email</label></td>
+                <td><input type="text" id="address" name="address" th:object="${address}" /></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Submit" /></td>
+            </tr>
+        </table>
+    </form>
+</head>
+<body>
+
+</body>
+</html>
