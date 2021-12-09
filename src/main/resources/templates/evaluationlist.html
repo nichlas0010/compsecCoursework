@@ -14,7 +14,7 @@
                 <td><label>Contact Type</label></td>
                 <td th:text="${instance.key.contactType}"/>
             </tr>
-            <img th:if="${instance.key.hasImage}" style="margin:auto;width:50%;" th:src="${'/imgs/'+instance.key.id}"/>
+            <img th:if="${instance.key.hasImage}" style="margin-left:30%;" th:src="${'/imgs/'+instance.key.id}"/>
             <tr>
                 <td><label>Name</label></td>
                 <td th:text="${instance.value.name}"/>
