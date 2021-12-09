@@ -84,14 +84,13 @@ public class LoveJoyController {
             UserEntity userEntity = new UserEntity(form, String.valueOf(random.nextInt(12412953)));
             userRepo.save(userEntity);
 
-            //preparing Multimedia Message and sending
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             try {
                 MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
                 helper.setTo(userEntity.getEmailAddress());
                 helper.setSubject("Email confirmation");
                 helper.setText(
-                        "Please click <a href='lovejoy.ashleigh.rocks/confirmemail?username=" +
+                        "Dear "+userEntity.getName()+",please click <a href='lovejoy.ashleigh.rocks/confirmemail?username=" +
                         userEntity.getName() +  "&token=" + userEntity.getToken() + "'>HERE</a> to confirm your email!",
                         true);
 
@@ -140,20 +139,18 @@ public class LoveJoyController {
 
     @RequestMapping(value = "/loginuser", method = RequestMethod.POST)
     public String loginUser(@ModelAttribute LoginForm form, Model model, HttpSession session) {
-        Optional<UserEntity> option = userRepo.findById(form.getUsername());
-        if (option.isPresent()) {
-            UserEntity userEntity = option.get();
-            if (userEntity.comparePassword(form.getPassword())) {
-                session.setAttribute("login", form.getUsername());
-                if (userEntity.isAdmin()) {
-                    session.setAttribute("admin", true);
-                }
-                return "redirect:/";
+
+        UserEntity userEntity = userRepo.findByEmailAddress(form.getEmailAddress());
+        if (userEntity.comparePassword(form.getPassword())) {
+            session.setAttribute("login", userEntity.getEmailAddress());
+            if (userEntity.isAdmin()) {
+                session.setAttribute("admin", true);
             }
+            return "redirect:/";
         }
         form.setPassword("");
         model.addAttribute("user", form);
-        model.addAttribute("error", "Incorrect username or password!");
+        model.addAttribute("error", "Incorrect email address or password!");
         return "login";
     }
 
@@ -186,7 +183,7 @@ public class LoveJoyController {
             return "redirect:/";
         }
         if (request.computeValidity()) {
-            EvaluationEntity entity = new EvaluationEntity((String) session.getAttribute("login"), request);
+            EvaluationEntity entity = new EvaluationEntity(userRepo.findByEmailAddress((String) session.getAttribute("login")), request);
             evalRepo.save(entity);
             return "requested";
         }

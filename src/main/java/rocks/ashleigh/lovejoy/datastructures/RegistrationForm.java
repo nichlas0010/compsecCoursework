@@ -39,16 +39,9 @@ public class RegistrationForm {
         if (userRepo.findByEmailAddress(emailAddress) != null) {
             errors.add("Email address is already in use!");
         }
-        if (userRepo.findById(name).isPresent()) {
-            errors.add("Username is already in use!");
-        }
 
         if (!password.equals(passwordConfirmation)) {
             errors.add("Passwords do not match!");
-        }
-
-        if (!name.equals(name.replaceAll("[^a-zA-Z0-9]", ""))) {
-            errors.add("Username contains non-alphanumeric characters! Please only use a-Z and 0-9!");
         }
 
         if (!password.matches("(?=(.*[a-z]))(?=(.*[A-Z]))(?=(.*[0-9]))(?=(.*[!@#$%^&*()\\-__+.])).{8,}")) {

@@ -13,8 +13,9 @@ public class EvaluationEntity {
 
     public EvaluationEntity() {}
 
-    public EvaluationEntity(String name, EvaluationRequest request) {
-        this.name = name;
+    public EvaluationEntity(UserEntity user, EvaluationRequest request) {
+        emailAddress = user.getEmailAddress();
+        phoneNumber = user.getPhoneNumber();
         comments = request.getComments();
         contactType = request.getContactType();
         try {
@@ -28,7 +29,8 @@ public class EvaluationEntity {
     @Id
     @GeneratedValue
     private int id;
-    private String name;
+    private String emailAddress;
+    private String phoneNumber;
     private String comments;
     private String contactType;
     private byte[] image;

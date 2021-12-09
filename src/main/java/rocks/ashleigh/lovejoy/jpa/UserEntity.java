@@ -45,8 +45,9 @@ public class UserEntity {
         return false;
     }
 
-    @Id
+
     private String name;
+    @Id
     private String emailAddress;
     private String password;
     private String phoneNumber;
