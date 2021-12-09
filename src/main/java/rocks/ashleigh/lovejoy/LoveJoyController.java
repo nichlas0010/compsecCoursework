@@ -180,8 +180,7 @@ public class LoveJoyController {
     }
 
     @PostMapping("/submitpin")
-    public String submitPin(Model model, HttpSession session) {
-        String pin = (String) model.getAttribute("pin");
+    public String submitPin(@ModelAttribute("pin") String pin, HttpSession session) {
         if(pin.equals(session.getAttribute("pin"))) {
             session.setAttribute("loggedin", true);
             return "redirect:/";
