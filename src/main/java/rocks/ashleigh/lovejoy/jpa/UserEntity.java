@@ -28,7 +28,7 @@ public class UserEntity {
             password = new String(Base64.encodeBase64(MessageDigest.getInstance("SHA-256").digest((password + token).getBytes())));
         } catch (Exception e) {
             // This will always work, SHA-256 is going nowhere. But just in case, I'll print the error.
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error hashing password", e);
         }
     }
 
@@ -37,7 +37,7 @@ public class UserEntity {
             pass = new String(Base64.encodeBase64(MessageDigest.getInstance("SHA-256").digest((pass + token).getBytes())));
             return password.equals(pass);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error comparing passwords", e);
         }
     }
 

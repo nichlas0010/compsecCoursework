@@ -92,7 +92,7 @@ public class LoveJoyController {
 
                 mailSender.send(mimeMessage);
             } catch (MessagingException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error sending email to user", e);
             }
 
             return "emailconfirmation";
@@ -204,7 +204,7 @@ public class LoveJoyController {
         return "evaluationlist";
     }
 
-    @RequestMapping(value = "/imgs/{img_id}")
+    @GetMapping(value = "/imgs/{img_id}")
     public ResponseEntity<byte[]> getImage(@PathVariable("img_id") String s) {
         Optional<EvaluationEntity> opt = evalRepo.findById(Integer.valueOf(s));
         if (!opt.isPresent()) {

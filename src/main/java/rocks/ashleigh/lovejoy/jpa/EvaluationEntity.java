@@ -25,7 +25,7 @@ public class EvaluationEntity {
                 hasImage = true;
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error retreiving image from evaluation request", e);
         }
 
     }
