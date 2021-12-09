@@ -39,7 +39,7 @@ public class RegistrationForm {
         if (userRepo.findByEmailAddress(emailAddress) != null) {
             errors.add("Email address is already in use!");
         }
-        if (userRepo.findById(name).get() != null) {
+        if (userRepo.findById(name).isPresent()) {
             errors.add("Username is already in use!");
         }
 
