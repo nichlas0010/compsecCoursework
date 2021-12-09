@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Pin</title>
     <div style="margin:auto;width:50%;">Provide pin from email -- Click <a href="/">here</a> to return to the main page!</div>
-    <input type="text" id="pin" name="pin"/>
+    <form style="margin:auto;width:50%;" action="#" th:action="@{/submitpin}" method="post">
+        <table border="1">
+            <tr>
+                <td><label>Pin</label></td>
+                <td><input type="text" id="pin" name="pin" /></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Submit" /></td>
+            </tr>
+        </table>
+    </form>
 </head>
 <body>
 
