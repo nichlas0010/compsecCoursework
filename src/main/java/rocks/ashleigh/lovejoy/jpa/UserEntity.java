@@ -34,6 +34,7 @@ public class UserEntity {
             // This will always work, SHA-256 is going nowhere. But just in case, I'll print the error.
             throw new RuntimeException("Error hashing password", e);
         }
+        lastLogin = LocalDateTime.now();
     }
 
     public boolean comparePassword(String pass) {
