@@ -41,9 +41,8 @@ public class UserEntity {
             return password.equals(pass);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            return false;
         }
+        return false;
     }
 
     @Id
