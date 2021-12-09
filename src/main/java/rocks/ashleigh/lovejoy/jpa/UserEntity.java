@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -50,4 +51,5 @@ public class UserEntity {
     private String token;
     private boolean emailConfirmed;
     private boolean isAdmin;
+    private LocalDateTime lastLogin;
 }

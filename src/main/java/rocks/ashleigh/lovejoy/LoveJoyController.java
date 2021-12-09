@@ -22,6 +22,7 @@ import rocks.ashleigh.lovejoy.jpa.UserRepository;
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -137,16 +138,21 @@ public class LoveJoyController {
     public String loginUser(@ModelAttribute LoginForm form, Model model, HttpSession session) {
 
         UserEntity userEntity = userRepo.findByEmailAddress(form.getEmailAddress());
-        if (userEntity.comparePassword(form.getPassword())) {
+        if (userEntity.getLastLogin() != null && LocalDateTime.now().minusSeconds(5).compareTo(userEntity.getLastLogin()) <= 0 ) {
+            model.addAttribute("error", "Please wait 5 seconds before attempting to login again!");
+
+        } else if (userEntity != null && userEntity.comparePassword(form.getPassword())) {
             session.setAttribute("login", userEntity.getEmailAddress());
             if (userEntity.isAdmin()) {
                 session.setAttribute("admin", true);
             }
             return "redirect:/";
+        } else {
+
+            model.addAttribute("error", "Incorrect email address or password!");
         }
         form.setPassword("");
         model.addAttribute("user", form);
-        model.addAttribute("error", "Incorrect email address or password!");
         return "login";
     }
 
