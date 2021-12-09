@@ -6,7 +6,6 @@ import rocks.ashleigh.lovejoy.datastructures.RegistrationForm;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 

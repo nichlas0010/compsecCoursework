@@ -57,7 +57,7 @@ public class LoveJoyController {
     // DONE
     @GetMapping("/")
     public String mainPage(Model model, HttpSession session) {
-        model.addAttribute("login", session.getAttribute("login"));
+        model.addAttribute("loggedin", session.getAttribute("loggedin"));
         model.addAttribute("admin", session.getAttribute("admin"));
         return "main";
     }
@@ -87,7 +87,7 @@ public class LoveJoyController {
                 helper.setTo(userEntity.getEmailAddress());
                 helper.setSubject("Email confirmation");
                 helper.setText(
-                        "Dear "+userEntity.getName()+",please click <a href='lovejoy.ashleigh.rocks/confirmemail?address=" +
+                        "Dear "+userEntity.getName()+", please click <a href='lovejoy.ashleigh.rocks/confirmemail?address=" +
                         userEntity.getEmailAddress() +  "&token=" + userEntity.getToken() + "'>HERE</a> to confirm your email!",
                         true);
 
@@ -127,14 +127,14 @@ public class LoveJoyController {
     /** -- LOGIN -- **/
     @GetMapping("/login")
     public String loginPage(Model model, HttpSession session) {
-        if (session.getAttribute("login") != null) {
+        if (session.getAttribute("loggedin") != null) {
             return "redirect:/";
         }
         model.addAttribute("user", new LoginForm());
-        return "login";
+        return "loggedin";
     }
 
-    @RequestMapping(value = "/loginuser", method = RequestMethod.POST)
+    @PostMapping("/loginuser")
     public String loginUser(@ModelAttribute LoginForm form, Model model, HttpSession session) {
 
         UserEntity userEntity = userRepo.findByEmailAddress(form.getEmailAddress());
@@ -143,22 +143,55 @@ public class LoveJoyController {
 
         } else if (userEntity != null && userEntity.comparePassword(form.getPassword())) {
             session.setAttribute("login", userEntity.getEmailAddress());
+            String pin = String.valueOf(random.nextInt(9999));
+            session.setAttribute("pin", pin);
+
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            try {
+                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+                helper.setTo(userEntity.getEmailAddress());
+                helper.setSubject("Login Pin");
+                helper.setText(
+                        "Dear "+userEntity.getName()+", please enter this pin to login: " + pin,
+                        true);
+
+                mailSender.send(mimeMessage);
+            } catch (MessagingException e) {
+                throw new RuntimeException("Error sending email containing pin to user ", e);
+            }
+
             if (userEntity.isAdmin()) {
                 session.setAttribute("admin", true);
             }
-            return "redirect:/";
+            return "redirect:/askforpin";
         } else {
 
             model.addAttribute("error", "Incorrect email address or password!");
         }
         form.setPassword("");
         model.addAttribute("user", form);
-        return "login";
+        return "loggedin";
+    }
+
+    @GetMapping("/askforpin")
+    public String askForPin() {
+        return "pin";
+    }
+
+    @PostMapping("/submitpin")
+    public String submitPin(Model model, HttpSession session) {
+        String pin = (String) model.getAttribute("pin");
+        if(pin.equals(session.getAttribute("pin"))) {
+            session.setAttribute("loggedin", true);
+            return "redirect:/";
+        } else {
+            return "redirect:/login";
+        }
     }
 
     @GetMapping("/logout")
     public RedirectView logoutPage(HttpSession session) {
-        session.removeAttribute("login");
+        session.removeAttribute("loggedin");
         session.removeAttribute("admin");
         return new RedirectView("/");
     }
@@ -172,7 +205,7 @@ public class LoveJoyController {
     // TODO
     @GetMapping("/requestevaluation")
     public String requestPage(Model model, HttpSession session) {
-        if (session.getAttribute("login") == null) {
+        if (session.getAttribute("loggedin") == null) {
             return "redirect:/";
         }
         model.addAttribute("request", new EvaluationRequest());
@@ -181,7 +214,7 @@ public class LoveJoyController {
 
     @PostMapping("/submitrequest")
     public String submitRequest(@ModelAttribute EvaluationRequest request, HttpSession session, Model model) {
-        if (session.getAttribute("login") == null) {
+        if (session.getAttribute("loggedin") == null) {
             return "redirect:/";
         }
         if (request.computeValidity()) {
@@ -197,7 +230,7 @@ public class LoveJoyController {
     // TODO
     @GetMapping("/evaluationrequests")
     public String evaluationPage(HttpSession session, Model model) {
-        if (session.getAttribute("login") == null || session.getAttribute("admin") == null) {
+        if (session.getAttribute("loggedin") == null || session.getAttribute("admin") == null) {
             return "redirect:/";
         }
 
