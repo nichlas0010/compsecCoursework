@@ -174,7 +174,8 @@ public class LoveJoyController {
     }
 
     @GetMapping("/askforpin")
-    public String askForPin() {
+    public String askForPin(Model model) {
+        model.addAttribute("pin", "");
         return "pin";
     }
 
