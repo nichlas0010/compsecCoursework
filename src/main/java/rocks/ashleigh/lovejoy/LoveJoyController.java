@@ -6,7 +6,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 import rocks.ashleigh.lovejoy.datastructures.EvaluationRequest;
 import rocks.ashleigh.lovejoy.datastructures.LoginForm;
@@ -17,16 +16,9 @@ import rocks.ashleigh.lovejoy.jpa.UserEntity;
 import rocks.ashleigh.lovejoy.jpa.UserRepository;
 
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpSession;
-import javax.swing.*;
-import java.io.File;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
 
 @Controller
 public class LoveJoyController {
@@ -194,11 +186,18 @@ public class LoveJoyController {
 
     // TODO
     @GetMapping("/evaluationrequests")
-    public String evaluationPage(HttpSession session) {
+    public String evaluationPage(HttpSession session, Model model) {
         if (session.getAttribute("login") == null || session.getAttribute("admin") == null) {
             return "redirect:/";
         }
-        return "evaluation";
+
+        ArrayList<EvaluationEntity> evals = new ArrayList<>(evalRepo.findAll());
+        HashMap<EvaluationEntity, UserEntity> map = new HashMap<>();
+        for (EvaluationEntity eval : evals) {
+            map.put(eval, userRepo.findByEmailAddress(eval.getEmailAddress()));
+        }
+        model.addAttribute("requests", map);
+        return "evaluationlist";
     }
 
 }

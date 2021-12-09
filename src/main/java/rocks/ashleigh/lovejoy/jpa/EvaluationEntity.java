@@ -1,13 +1,13 @@
 package rocks.ashleigh.lovejoy.jpa;
 
+import lombok.Data;
 import rocks.ashleigh.lovejoy.datastructures.EvaluationRequest;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.io.File;
-import java.nio.file.Files;
 
+@Data
 @Entity
 public class EvaluationEntity {
 
