@@ -24,7 +24,9 @@ public class EvaluationEntity {
             } else {
                 hasImage = true;
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

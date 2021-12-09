@@ -91,7 +91,9 @@ public class LoveJoyController {
                         true);
 
                 mailSender.send(mimeMessage);
-            } catch (MessagingException e) {}
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
 
             return "emailconfirmation";
         }
