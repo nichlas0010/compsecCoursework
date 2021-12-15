@@ -136,7 +136,7 @@ public class LoveJoyController {
     }
 
     @PostMapping("/loginuser")
-    public String loginUser(@ModelAttribute LoginForm form, Model model, HttpSession session) {
+    public String loginUser(@ModelAttribute("user") LoginForm form, Model model, HttpSession session) {
 
         UserEntity userEntity = userRepo.findByEmailAddress(form.getEmailAddress());
         if (userEntity != null && userEntity.getLastLogin() != null && LocalDateTime.now().minusSeconds(5).compareTo(userEntity.getLastLogin()) <= 0 ) {
