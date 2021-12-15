@@ -139,7 +139,7 @@ public class LoveJoyController {
     public String loginUser(@ModelAttribute LoginForm form, Model model, HttpSession session) {
 
         UserEntity userEntity = userRepo.findByEmailAddress(form.getEmailAddress());
-        if (userEntity.getLastLogin() != null && LocalDateTime.now().minusSeconds(5).compareTo(userEntity.getLastLogin()) <= 0 ) {
+        if (userEntity != null && userEntity.getLastLogin() != null && LocalDateTime.now().minusSeconds(5).compareTo(userEntity.getLastLogin()) <= 0 ) {
             model.addAttribute("error", "Please wait 5 seconds before attempting to login again!");
 
         } else if (userEntity != null && userEntity.comparePassword(form.getPassword())) {
@@ -220,11 +220,8 @@ public class LoveJoyController {
 
     @PostMapping("/secanswer")
     public String securityAnswer(@ModelAttribute("address") String address, @ModelAttribute("secAnswer") String answer, Model model) {
-        System.out.println("Address: "+address);
-        System.out.println("answer: "+answer);
         UserEntity userEntity = userRepo.findByEmailAddress(address);
         if (userEntity != null) {
-            System.out.println(answer);
             if (userEntity.getSecAnswer().equals(answer)) {
                 userEntity.setResetting(true);
                 userRepo.save(userEntity);
@@ -247,6 +244,7 @@ public class LoveJoyController {
             }
 
             model.addAttribute("address", address);
+            model.addAttribute("secAnswer", "");
             return "secquest";
         }
 
