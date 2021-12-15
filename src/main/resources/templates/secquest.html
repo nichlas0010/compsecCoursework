@@ -8,7 +8,7 @@
         <table border="1">
             <tr>
                 <td><label>Email</label></td>
-                <td><input id="address" name="address" th:text="${address}" th:object="${address}"/></td>
+                <td><input id="address" name="address" th:field="*{address}"/></td>
             </tr>
             <tr>
                 <td><label>Security Question</label></td>
@@ -16,7 +16,7 @@
             </tr>
             <tr>
                 <td><label>Security Answer</label></td>
-                <td><input type="text" id="secAnswer" name="secAnswer" th:text="${secAnswer}" th:object="${secAnswer}"/></td>
+                <td><input type="text" id="secAnswer" name="secAnswer" th:field="*{address}"/></td>
             </tr>
             <tr>
                 <td><input type="submit" value="Submit" /></td>
