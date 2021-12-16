@@ -244,6 +244,7 @@ public class LoveJoyController {
             }
 
             model.addAttribute("address", address);
+            model.addAttribute("secQuestion", userEntity.getSecQuestion());
             model.addAttribute("secAnswer", "");
             return "secquest";
         }
@@ -266,7 +267,7 @@ public class LoveJoyController {
     }
 
     @PostMapping("/resetpass")
-    public String resetPassword(@RequestBody ResetRequest reset, Model model) {
+    public String resetPassword(@RequestParam("reset") ResetRequest reset, Model model) {
         if(reset.computeValidity()) {
             UserEntity userEntity = userRepo.findByEmailAddress(reset.getAddress());
             if (userEntity != null) {
