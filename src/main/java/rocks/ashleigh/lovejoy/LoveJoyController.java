@@ -267,7 +267,7 @@ public class LoveJoyController {
     }
 
     @PostMapping("/resetpass")
-    public String resetPassword(@RequestParam("reset") ResetRequest reset, Model model) {
+    public String resetPassword(@ModelAttribute("reset") ResetRequest reset, Model model) {
         if(reset.computeValidity()) {
             UserEntity userEntity = userRepo.findByEmailAddress(reset.getAddress());
             if (userEntity != null) {
