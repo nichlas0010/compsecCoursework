@@ -166,7 +166,8 @@ public class LoveJoyController {
             }
             return "redirect:/askforpin";
         } else {
-
+            userEntity.setLastLogin(LocalDateTime.now());
+            userRepo.save(userEntity);
             model.addAttribute("error", "Incorrect email address or password!");
         }
         form.setPassword("");
